@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.RegisterActivity">
+
+    <TextView
+        android:id="@+id/tv_register_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="158dp"
+        android:layout_marginLeft="158dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="159dp"
+        android:layout_marginRight="159dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:visibility="invisible"
+        android:textColor="@color/design_default_color_error"/>
+
+    <EditText
+        android:id="@+id/et_register_email"
+        style="@style/editText"
+        android:layout_below="@id/tv_register_error"
+        android:layout_marginTop="20dp"
+        android:autofillHints=""
+        android:hint="@string/prompt_email"
+        android:inputType="text"
+        tools:ignore="TextFields" />
+
+    <EditText
+        android:id="@+id/et_register_first_name"
+        style="@style/editText"
+        android:layout_below="@id/et_register_email"
+        android:layout_marginTop="20dp"
+        android:autofillHints=""
+        android:hint="@string/prompt_first_name"
+        android:inputType="text"
+        tools:ignore="TextFields" />
+
+    <EditText
+        android:id="@+id/et_register_last_name"
+        style="@style/editText"
+        android:layout_below="@id/et_register_first_name"
+        android:layout_marginTop="20dp"
+        android:autofillHints=""
+        android:hint="@string/prompt_last_name"
+        android:inputType="text"
+        tools:ignore="TextFields" />
+
+    <EditText
+        android:id="@+id/et_register_password"
+        style="@style/editText"
+        android:layout_below="@id/et_register_last_name"
+        android:layout_marginTop="20dp"
+        android:autofillHints=""
+        android:hint="@string/prompt_password"
+        android:inputType="textPassword"
+        tools:ignore="TextFields" />
+
+    <EditText
+        android:id="@+id/et_register_retype_password"
+        style="@style/editText"
+        android:layout_below="@id/et_register_password"
+        android:layout_marginTop="20dp"
+        android:autofillHints=""
+        android:hint="@string/prompt_retype_password"
+        android:inputType="textPassword"
+        tools:ignore="TextFields" />
+
+    <Button
+        android:id="@+id/button_register"
+        style="@style/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_register_retype_password"
+        android:layout_marginTop="40dp"
+        android:text="@string/action_register" />
+
+    <TextView
+        android:id="@+id/tv_have_an_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_register"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="158dp"
+        android:layout_marginLeft="158dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="159dp"
+        android:layout_marginRight="159dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:text="@string/action_have_an_account"
+        android:textColor="@color/darkBlueLink"/>
+
+</RelativeLayout>
