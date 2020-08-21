@@ -1,11 +1,10 @@
-package com.example.bachelorthesisclient.activity;
+package com.example.bachelorthesisclient.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,8 +13,8 @@ import com.example.bachelorthesisclient.R;
 import com.example.bachelorthesisclient.model.BasicLogin;
 import com.example.bachelorthesisclient.model.LoggedUserPersistence;
 import com.example.bachelorthesisclient.service.AuthService;
+import com.example.bachelorthesisclient.util.LoggedInUserPersistenceUtil;
 import com.example.bachelorthesisclient.wrapper.GsonWrapper;
-import com.example.bachelorthesisclient.wrapper.SharedPreferenceWrapper;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.CompositeDisposable;
@@ -64,7 +63,8 @@ public class LoginActivity extends AppCompatActivity {
                                 String loggedUserJson = GsonWrapper.toJson(loggedUserPersistence);
 
                                 try {
-                                    SharedPreferenceWrapper.getInstance().put(LOGGED_USER_KEY, loggedUserJson);
+                                    LoggedInUserPersistenceUtil.setLoggedInUserData(loggedUserJson);
+//                                    SharedPreferenceWrapper.getInstance().put(LOGGED_USER_KEY, loggedUserJson);
                                     textViewErrorMessage.setVisibility(TextView.INVISIBLE);
 
                                     startActivity(new Intent(LoginActivity.this, HomeActivity.class));

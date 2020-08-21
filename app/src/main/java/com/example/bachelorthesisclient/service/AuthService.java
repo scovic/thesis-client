@@ -3,7 +3,7 @@ package com.example.bachelorthesisclient.service;
 import com.example.bachelorthesisclient.model.Register;
 import com.example.bachelorthesisclient.model.RegisterResponse;
 import com.example.bachelorthesisclient.wrapper.RetrofitWrapper;
-import com.example.bachelorthesisclient.api.AuthApi;
+import com.example.bachelorthesisclient.network.api.AuthApi;
 import com.example.bachelorthesisclient.model.BasicLogin;
 import com.example.bachelorthesisclient.model.BasicLoginResponse;
 import com.example.bachelorthesisclient.model.LoggedUserPersistence;

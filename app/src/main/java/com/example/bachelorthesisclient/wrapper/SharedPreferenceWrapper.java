@@ -4,15 +4,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.example.bachelorthesisclient.util.AppContext;
+
 public class SharedPreferenceWrapper {
     private SharedPreferences sharedPreferences;
     private static SharedPreferenceWrapper instance;
 
     private static final String SHARED_PREFERENCES = "SHARED_PREFERENCES";
 
-    public static SharedPreferenceWrapper getInstance() throws Exception {
+    public static SharedPreferenceWrapper getInstance() {
         if (instance == null) {
-            throw new Exception("SharedPreferenceWrapper instance not created");
+            instance = new SharedPreferenceWrapper(AppContext.getAppContext());
         }
 
         return instance;

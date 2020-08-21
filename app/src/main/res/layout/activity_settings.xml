@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".ui.activity.SettingsActivity">
+
+    <TextView
+        android:id="@+id/tv_notification_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp"
+        android:paddingHorizontal="8dp"
+        android:text="Notifications"
+        android:textSize="16sp" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_notification_title"
+        app:contentPadding="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp">
+
+            <RelativeLayout
+                android:id="@+id/receive_info_notif_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/label_receive_info_notifications"
+                    android:textSize="16sp" />
+
+                <Switch
+                    android:id="@+id/switch_receive_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/divider_1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/receive_info_notif_layout"
+                android:layout_marginVertical="8dp"
+                android:background="#c0c0c0" />
+
+            <RelativeLayout
+                android:id="@+id/radius_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider_1">
+
+                <TextView
+                    android:id="@+id/label_slider_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/label_settings_slider"
+                    android:textSize="16dp" />
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/slider_distance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/label_slider_settings"
+                    android:valueFrom="0"
+                    android:valueTo="300"
+                    app:labelBehavior="gone"
+                    />
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/divider_2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/radius_layout"
+                android:layout_marginVertical="8dp"
+                android:background="#c0c0c0" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

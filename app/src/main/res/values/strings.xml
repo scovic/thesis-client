@@ -13,5 +13,30 @@
     <string name="prompt_retype_password">Retype Password</string>
     <string name="action_have_an_account">Already have an account?</string>
     <string name="action_register">Sign up!</string>
+    <string name="label_content">Content</string>
+    <string name="checkbox_label_notify">Notify All</string>
+    <string name="menu_item_settings_title">Settings</string>
+    <string name="menu_item_warning_notification">Send Warning</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="cbx_label_receive_info">Receive info notifications</string>
+    <string name="toolbar_settings_title">Settings</string>
+    <string name="label_receive_info_notifications">Receive info notifications</string>
+    <string name="label_settings_slider">Distance</string>
+    <string name="menu_refresh">List Refresh</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
 </resources>

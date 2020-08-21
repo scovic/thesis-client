@@ -1,4 +1,4 @@
-package com.example.bachelorthesisclient.activity;
+package com.example.bachelorthesisclient.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.example.bachelorthesisclient.R;
 
-public class HomeActivity extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_map);
     }
 }

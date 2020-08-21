@@ -1,8 +1,6 @@
-package com.example.bachelorthesisclient.api;
+package com.example.bachelorthesisclient.network.api;
 
-import com.example.bachelorthesisclient.model.BasicLogin;
 import com.example.bachelorthesisclient.model.BasicLoginResponse;
-import com.example.bachelorthesisclient.model.Register;
 import com.example.bachelorthesisclient.model.RegisterResponse;
 
 import io.reactivex.Single;
