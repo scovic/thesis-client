@@ -1,7 +1,5 @@
 package com.example.bachelorthesisclient.util;
 
-import androidx.annotation.Nullable;
-
 import com.example.bachelorthesisclient.model.Settings;
 import com.example.bachelorthesisclient.wrapper.GsonWrapper;
 import com.example.bachelorthesisclient.wrapper.SharedPreferenceWrapper;
@@ -13,7 +11,6 @@ public class SettingsPersistenceUtil {
         String settingsJson = GsonWrapper.toJson(settings);
         SharedPreferenceWrapper.getInstance().put(SETTINGS_KEY, settingsJson);
     }
-
 
     public static Settings getSettings() {
         String settingsJson = getSettingsJson();

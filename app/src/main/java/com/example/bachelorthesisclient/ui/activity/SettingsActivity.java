@@ -17,7 +17,6 @@ import com.example.bachelorthesisclient.config.Values;
 import com.example.bachelorthesisclient.ui.viewmodel.SettingsViewModel;
 import com.google.android.material.slider.Slider;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -63,8 +62,8 @@ public class SettingsActivity extends AppCompatActivity {
         this.sliderDistance = findViewById(R.id.slider_distance);
         this.textViewSliderLabel = findViewById(R.id.label_slider_settings);
 
-        this.sliderDistance.setValueFrom(Values.MIN_DISTANCE);
-        this.sliderDistance.setValueTo(Values.MAX_DISTANCE);
+        this.sliderDistance.setValueFrom(Values.MIN_DISTANCE_INFO_NOTIFICATIONS);
+        this.sliderDistance.setValueTo(Values.MAX_DISTANCE_INFO_NOTIFICATIONS);
 
         this.switchReceiveNotifs.setChecked(
                 mViewModel.getReceiveInfoNotifications().getValue()

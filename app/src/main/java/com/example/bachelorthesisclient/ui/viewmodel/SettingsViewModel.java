@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.bachelorthesisclient.model.Settings;
 import com.example.bachelorthesisclient.repository.RepositoryFactory;
 import com.example.bachelorthesisclient.repository.SettingsRepository;
+import com.example.bachelorthesisclient.wrapper.PushNotificationsWrapper;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
@@ -64,6 +65,12 @@ public class SettingsViewModel extends ViewModel {
 
     public void setReceiveInfoNotifications(Boolean receiveInfoNotifications) {
         this.receiveInfoNotifications.setValue(receiveInfoNotifications);
+
+        if (receiveInfoNotifications) {
+            PushNotificationsWrapper.addInfoInterest();
+        } else {
+            PushNotificationsWrapper.removeInfoInterest();
+        }
 
         this.settings.setReceiveInfoNotifications(receiveInfoNotifications);
         this.settingsRepository.saveSettings(settings);

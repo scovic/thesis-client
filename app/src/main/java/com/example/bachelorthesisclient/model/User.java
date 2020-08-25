@@ -30,6 +30,10 @@ public class User {
         return this.id == user.getId();
     }
 
+    public String getFullName() {
+        return String.format("%s %s", firstName, lastName);
+    }
+
     public int getId() {
         return id;
     }

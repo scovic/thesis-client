@@ -13,6 +13,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BACKEND_BASE_URL", "\"http://10.0.2.2:8080\"")
+        buildConfigField("String", "MAPS_API", MAPS_API)
     }
 
     buildTypes {
@@ -61,7 +64,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.2.3'
     implementation 'com.pusher:push-notifications-android:1.6.2'
     implementation 'com.auth0.android:jwtdecode:2.0.0'
+
     implementation 'org.osmdroid:osmdroid-android:6.1.8'
+    implementation 'com.github.MKergall:osmbonuspack:6.6.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

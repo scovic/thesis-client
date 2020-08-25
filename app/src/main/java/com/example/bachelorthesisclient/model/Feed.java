@@ -12,6 +12,9 @@ public class Feed {
     private User author;
     private List<Bitmap> images;
 
+    public Feed() {
+    }
+
     public Feed(FeedDto feedDto) {
         this.post = new Post(feedDto.getPost());
         this.author = new User(feedDto.getAuthor());

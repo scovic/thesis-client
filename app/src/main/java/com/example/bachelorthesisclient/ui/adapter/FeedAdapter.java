@@ -1,7 +1,6 @@
 package com.example.bachelorthesisclient.ui.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
         Feed feed = feedList.get(position);
 
         if (listItem == null)
-            listItem = LayoutInflater.from(context).inflate(R.layout.item_home_feed, parent, false);
+            listItem = LayoutInflater.from(context).inflate(R.layout.feed_details, parent, false);
 
         TextView userName = listItem.findViewById(R.id.text_name);
         TextView timeDate = listItem.findViewById(R.id.text_date);

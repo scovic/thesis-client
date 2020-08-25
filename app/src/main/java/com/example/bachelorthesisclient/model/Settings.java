@@ -16,7 +16,7 @@ public class Settings {
     }
 
     public void setCurrentDistance(float currentDistance) {
-        if (currentDistance > Values.MIN_DISTANCE && currentDistance < Values.MAX_DISTANCE) {
+        if (currentDistance > Values.MIN_DISTANCE_INFO_NOTIFICATIONS && currentDistance < Values.MAX_DISTANCE_INFO_NOTIFICATIONS) {
             this.currentDistance = currentDistance;
         }
     }

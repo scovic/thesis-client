@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.ImageView;
 
 import com.example.bachelorthesisclient.BuildConfig;
+import com.example.bachelorthesisclient.util.AppContext;
 import com.example.bachelorthesisclient.util.LoggedInUserPersistenceUtil;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
@@ -17,16 +18,12 @@ import okhttp3.Response;
 
 public class PicassoWrapper {
     private Picasso picasso;
-
     private static PicassoWrapper instance;
 
-    public static void createInstance(Context context) {
-        if (instance == null) {
-            instance = new PicassoWrapper(context);
-        }
-    }
-
     public static PicassoWrapper getInstance() {
+        if (instance == null) {
+            instance = new PicassoWrapper(AppContext.getAppContext());
+        }
         return instance;
     }
 

@@ -60,8 +60,8 @@ public class NotificationsWrapper {
     public NotificationsWrapper setOnTapAction(Intent intent) {
         this.checkForBuilder();
 
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(AppContext.getAppContext(), 0, intent, 0);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+        PendingIntent pendingIntent = PendingIntent.getActivity(AppContext.getAppContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
 
         return this;
@@ -74,7 +74,15 @@ public class NotificationsWrapper {
         return this;
     }
 
+    public NotificationsWrapper setAutoCancel() {
+        checkForBuilder();
+        builder.setAutoCancel(true);
+
+        return this;
+    }
+
     public void createNotification() {
+        checkForBuilder();
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(AppContext.getAppContext());
         int notificationId = RandomNumberUtil.getInstance().getRandomNumber();
 
@@ -87,7 +95,6 @@ public class NotificationsWrapper {
             builder = new NotificationCompat.Builder(AppContext.getAppContext(), CHANNEL_ID);
             builder.setSmallIcon(R.drawable.ic_launcher_foreground);
             builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-            builder.setAutoCancel(true);
         }
     }
 }

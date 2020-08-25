@@ -23,8 +23,6 @@ public class MainActivity extends AppCompatActivity {
         PushNotificationsWrapper.init();
 
         SharedPreferenceWrapper.createInstance(this);
-        PicassoWrapper.createInstance(this);
-
         this.determineFirstActivity();
     }
 

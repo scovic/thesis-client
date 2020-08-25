@@ -48,7 +48,7 @@ public class NotificationData {
     }
 
     public int getSender() {
-        return Integer.valueOf(data.get(this.SENDER_ID_KEY));
+        return Integer.parseInt(data.get(this.SENDER_ID_KEY));
     }
 
     public NotificationData setPostId(int postId) {
@@ -57,7 +57,7 @@ public class NotificationData {
     }
 
     public int getPostId() {
-        return Integer.valueOf( data.get(this.POST_ID_KEY));
+        return Integer.parseInt(data.get(this.POST_ID_KEY));
     }
 
     public NotificationData setInfoTag() {

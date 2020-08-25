@@ -1,10 +1,7 @@
 package com.example.bachelorthesisclient.ui.viewmodel;
 
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.location.Location;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -19,10 +16,8 @@ import com.example.bachelorthesisclient.wrapper.FusedLocationProviderWrapper;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
-import io.reactivex.SingleSource;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
@@ -61,7 +56,7 @@ public class CreateFeedViewModel extends ViewModel {
         }
     }
 
-    public void handleCreateFeed() {
+    private void handleCreateFeed() {
         int authorId = LoggedInUserPersistenceUtil.getUserId();
 
         Single<PostDto> createFeedSingle = feedRepository.createNewFeed(
@@ -76,47 +71,18 @@ public class CreateFeedViewModel extends ViewModel {
                     .getLastLocation();
 
             Single.zip(createFeedSingle, getCurrentLocationSingle, this.handleZipResult())
-                    .flatMap(new Function<Single<Boolean>, Single<Boolean>>() {
-                        @Override
-                        public Single<Boolean> apply(Single<Boolean> booleanSingle) throws Exception {
-                            return booleanSingle;
-                        }
-                    })
-                    .subscribe(new SingleObserver<Boolean>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onSuccess(Boolean aBoolean) {
-                            setSuccessfulCreated(true);
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
-                        }
-                    });
+                    .flatMap(
+                            new Function<Single<Boolean>, Single<Boolean>>() {
+                                @Override
+                                public Single<Boolean> apply(Single<Boolean> booleanSingle) throws Exception {
+                                    return booleanSingle;
+                                }
+                            }
+                    )
+                    .subscribe(this.handleCreateFeedSubscribe());
 
         } else {
-            createFeedSingle
-                    .subscribe(new SingleObserver<PostDto>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onSuccess(PostDto postDto) {
-                            setSuccessfulCreated(true);
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
-                        }
-                    });
+            createFeedSingle.subscribe(this.handleCreateFeedSubscribe());
         }
     }
 
@@ -136,6 +102,25 @@ public class CreateFeedViewModel extends ViewModel {
                         postDto,
                         new com.example.bachelorthesisclient.model.Location(lat, lon)
                 );
+            }
+        };
+    }
+
+    private SingleObserver<Object> handleCreateFeedSubscribe() {
+        return new SingleObserver<Object>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(Object o) {
+                setSuccessfulCreated(true);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
             }
         };
     }
@@ -181,6 +166,4 @@ public class CreateFeedViewModel extends ViewModel {
     public MutableLiveData<Boolean> getEmptyContentField() {
         return emptyContentField;
     }
-
-
 }

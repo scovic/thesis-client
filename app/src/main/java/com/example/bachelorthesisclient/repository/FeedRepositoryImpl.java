@@ -65,7 +65,6 @@ public class FeedRepositoryImpl implements FeedRepository {
     public Single<Post> getPost(int id) {
         return feedApi.getPost(this.getAuthorizationHeaderValue(), id)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map(new Function<PostDto, Post>() {
                     @Override
                     public Post apply(PostDto postDto) throws Exception {

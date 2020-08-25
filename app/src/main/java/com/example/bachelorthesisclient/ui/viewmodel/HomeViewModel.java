@@ -27,7 +27,7 @@ public class HomeViewModel extends ViewModel {
     private MutableLiveData<List<Feed>> feeds;
     private MutableLiveData<Boolean> loading;
 
-    public HomeViewModel() throws Exception {
+    public HomeViewModel() {
         super();
         this.feedRepository = (FeedRepository) RepositoryFactory.get(RepositoryFactory.FEED_REPOSITORY);
         this.notificationRepository = (NotificationRepository) RepositoryFactory.get(RepositoryFactory.NOTIFICATION_REPOSITORY);
@@ -41,22 +41,24 @@ public class HomeViewModel extends ViewModel {
 
     public void getData() {
         this.feedRepository.getPosts()
-                .subscribe(new SingleObserver<List<Feed>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
+                .subscribe(
+                        new SingleObserver<List<Feed>>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                            }
 
-                    @Override
-                    public void onSuccess(List<Feed> feeds) {
-                        setFeeds(feeds);
-                        setLoading(false);
-                    }
+                            @Override
+                            public void onSuccess(List<Feed> feeds) {
+                                setFeeds(feeds);
+                                setLoading(false);
+                            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e("HomeViewModel", e.getMessage() != null ? e.getMessage() : "Something went wrong");
-                    }
-                });
+                            @Override
+                            public void onError(Throwable e) {
+                                Log.e("HomeViewModel", e.getMessage() != null ? e.getMessage() : "Something went wrong");
+                            }
+                        }
+                );
     }
 
     public MutableLiveData<Boolean> getLoading() {
@@ -78,23 +80,24 @@ public class HomeViewModel extends ViewModel {
     public void sendWarningNotification() {
         FusedLocationProviderWrapper.getInstance()
                 .getLastLocation()
-                .flatMap(new Function<Location, SingleSource<Boolean>>() {
-                    @Override
-                    public SingleSource<Boolean> apply(Location location) throws Exception {
-                        double lat = 0;
-                        double lon = 0;
+                .flatMap(
+                        new Function<Location, SingleSource<Boolean>>() {
+                            @Override
+                            public SingleSource<Boolean> apply(Location location) throws Exception {
+                                double lat = 0;
+                                double lon = 0;
 
-                        if (location != null) {
-                            lat = location.getLatitude();
-                            lon = location.getLongitude();
+                                if (location != null) {
+                                    lat = location.getLatitude();
+                                    lon = location.getLongitude();
+                                }
+
+                                return notificationRepository.sendWarningNotification(
+                                        new com.example.bachelorthesisclient.model.Location(lat, lon)
+                                );
+                            }
                         }
-
-                        return notificationRepository.sendWarningNotification(
-                                new com.example.bachelorthesisclient.model.Location(lat, lon)
-                        );
-                    }
-                })
+                )
                 .subscribe();
     }
-
 }

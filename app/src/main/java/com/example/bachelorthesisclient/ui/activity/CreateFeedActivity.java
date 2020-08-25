@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.example.bachelorthesisclient.R;
 import com.example.bachelorthesisclient.ui.viewmodel.CreateFeedViewModel;
+import com.example.bachelorthesisclient.wrapper.FusedLocationProviderWrapper;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;
@@ -109,7 +110,6 @@ public class CreateFeedActivity extends AppCompatActivity {
         observeViewModel();
     }
 
-
     private void setOnClickListeners() {
         uploadImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,21 +157,15 @@ public class CreateFeedActivity extends AppCompatActivity {
 
     private void selectImage() {
         final CharSequence[] options = {"Take Photo", "Choose from Gallery"};
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (options[which].equals("Take Photo")) {
-                    Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(takePhoto, 0);
+                    takeAPhoto();
                 } else if (options[which].equals("Choose from Gallery")) {
-                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                    photoPickerIntent.setType("image/*");
-                    photoPickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-
-                    startActivityForResult(photoPickerIntent, 1);
+                    choosePhotoFromGallery();
                 } else {
                     dialog.dismiss();
                 }
@@ -180,7 +174,6 @@ public class CreateFeedActivity extends AppCompatActivity {
 
         builder.show();
     }
-
 
     private void observeViewModel() {
         mViewModel.getImages().observe(this, new Observer<List<Bitmap>>() {
@@ -234,4 +227,19 @@ public class CreateFeedActivity extends AppCompatActivity {
 
         iv.setImageBitmap(photo);
     }
+
+    private void takeAPhoto() {
+        Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePhoto, 0);
+    }
+
+    private void choosePhotoFromGallery() {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+
+        photoPickerIntent.setType("image/*");
+        photoPickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+
+        startActivityForResult(photoPickerIntent, 1);
+    }
+
 }

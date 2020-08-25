@@ -1,5 +1,7 @@
 package com.example.bachelorthesisclient.util;
 
+import android.content.SharedPreferences;
+
 import com.auth0.android.jwt.JWT;
 
 import com.example.bachelorthesisclient.model.LoggedUserPersistence;
