@@ -1,9 +1,8 @@
-package com.example.bachelorthesisclient.repository;
+package com.example.bachelorthesisclient.repository.feed;
 
 import android.graphics.Bitmap;
 
 import com.example.bachelorthesisclient.model.Feed;
-import com.example.bachelorthesisclient.model.Location;
 import com.example.bachelorthesisclient.model.Post;
 import com.example.bachelorthesisclient.network.dto.PostDto;
 
@@ -17,4 +16,6 @@ public interface FeedRepository {
     Single<Post> getPost(int id);
     Single<ResponseBody> getFile(int postId, String fileName);
     Single<PostDto> createNewFeed(String content, int authorId, List<Bitmap> bitmaps);
+    Single<Boolean> deleteFeed(Feed feed);
+    Single<Boolean> updateFeed(Feed feed, List<Bitmap> bitmaps);
 }

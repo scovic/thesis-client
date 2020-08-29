@@ -22,6 +22,20 @@ public class User {
         this.lastName = lastName;
     }
 
+    public User(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public UserDto getUserData() {
+        return new UserDto(
+                getId(),
+                getEmail(),
+                getFirstName(),
+                getLastName()
+        );
+    }
+
     public boolean isSameUser(int id) {
         return this.id == id;
     }
@@ -31,7 +45,11 @@ public class User {
     }
 
     public String getFullName() {
-        return String.format("%s %s", firstName, lastName);
+        if (getFirstName().isEmpty() || getLastName().isEmpty()) {
+            return getEmail();
+        } else {
+            return String.format("%s %s", getFirstName(), getLastName());
+        }
     }
 
     public int getId() {

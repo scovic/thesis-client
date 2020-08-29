@@ -9,8 +9,8 @@ import androidx.preference.PreferenceManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.example.bachelorthesisclient.BuildConfig;
 import com.example.bachelorthesisclient.R;
@@ -122,7 +122,7 @@ public class MapActivity extends AppCompatActivity {
             public void onChanged(MapObject feedMapObject) {
                 if (feedMapObject != null) {
                     addAnObjectToMap(feedMapObject, getOnFeedMarkerClickListener());
-                    centerLocationOnMap(feedMapObject.getLocation(), 19.0);
+                    centerLocationOnMap(feedMapObject.getLocation(), 18.0);
                     refreshMap();
                 }
             }
@@ -220,11 +220,12 @@ public class MapActivity extends AppCompatActivity {
         if (extras != null) {
             String tag = extras.getString("tag");
 
-            if (tag.equals(NotificationsMessagingService.INFO_TAG)) {
+            if (tag.equals(NotificationsMessagingService.INFO_TAG) || tag.equals("show_feed")) {
                 double latitude = extras.getDouble("latitude", 0);
                 double longitude = extras.getDouble("longitude", 0);
+                String content = extras.getString("content");
 
-                viewModel.setFeed(new FeedMapObject("New feed", new GeoPoint(latitude, longitude)));
+                viewModel.setFeed(new FeedMapObject(content, new GeoPoint(latitude, longitude)));
             } else {
                 viewModel.findEscapeRoute();
             }
@@ -245,11 +246,5 @@ public class MapActivity extends AppCompatActivity {
 
         refreshMap();
 
-    }
-
-    private void drawRoute(Polyline polyline) {
-        mapView.getOverlays().add(polyline);
-        refreshMap();
-//        viewModel.drawEscapeRoute(mapView);
     }
 }

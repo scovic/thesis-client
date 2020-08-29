@@ -2,6 +2,8 @@ package com.example.bachelorthesisclient.model;
 
 import com.example.bachelorthesisclient.network.dto.PostDto;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.util.Date;
 import java.util.List;
 
@@ -12,23 +14,27 @@ public class Post {
     private Date createdAt;
     private Date updatedAt;
     private List<String> attachmentNames;
+    private GeoPoint location;
 
     public Post(PostDto postDto) {
         this.id = postDto.getId();
         this.text = postDto.getText();
         this.authorId = postDto.getAuthorId();
-        this.createdAt = postDto.getCreatedAt();
-        this.updatedAt = postDto.getUpdatedAt();
+        this.createdAt = new Date(postDto.getCreatedAt());
+        this.updatedAt = new Date(postDto.getUpdatedAt());
         this.attachmentNames = postDto.getAttachmentNames();
+        this.location = new GeoPoint(postDto.getLatitude(), postDto.getLongitude());
     }
 
-    public Post(int id, String text, int authorId, Date createdAt, Date updatedAt, List<String> attachmentNames) {
-        this.id = id;
-        this.text = text;
-        this.authorId = authorId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.attachmentNames = attachmentNames;
+    public PostDto getData() {
+        return new PostDto(
+                getId(),
+                getText(),
+                getAuthorId(),
+                getLocation().getLatitude(),
+                getLocation().getLongitude(),
+                getAttachmentNames()
+        );
     }
 
     public int getId() {
@@ -51,31 +57,20 @@ public class Post {
         return authorId;
     }
 
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public Date getUpdatedAt() {
         return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public List<String> getAttachmentNames() {
         return attachmentNames;
     }
 
-    public void setAttachmentNames(List<String> attachmentNames) {
-        this.attachmentNames = attachmentNames;
+    public boolean hasLocation() {
+        return location.getLatitude() != 0 || location.getLongitude() != 0;
     }
+
+    public GeoPoint getLocation() {
+        return location;
+    }
+
 }

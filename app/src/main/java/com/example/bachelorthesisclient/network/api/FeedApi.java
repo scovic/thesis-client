@@ -7,9 +7,13 @@ import io.reactivex.Single;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface FeedApi {
@@ -27,9 +31,20 @@ public interface FeedApi {
             @Path("fileName") String fileName
     );
 
-
     @POST("/post-service")
     Single<PostDto> createFeed(
+            @Header("Authorization") String token,
+            @Body RequestBody requestBody
+    );
+
+    @DELETE("/post-service/{id}")
+    Single<Boolean> deleteFeed(
+            @Header("Authorization") String token,
+            @Path("id") int id
+    );
+
+    @PUT("/post-service")
+    Single<Boolean> updateFeed(
             @Header("Authorization") String token,
             @Body RequestBody requestBody
     );

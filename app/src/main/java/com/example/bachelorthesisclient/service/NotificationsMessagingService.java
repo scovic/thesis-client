@@ -98,6 +98,7 @@ public class NotificationsMessagingService extends MessagingService {
         Intent i = this.getIntent(data);
         i.putExtra("postId", data.getPostId());
         i.putExtra("tag", INFO_TAG);
+        i.putExtra("content", data.getBody());
 
         NotificationsWrapper.getInstance()
                 .setTitle(data.getTitle())

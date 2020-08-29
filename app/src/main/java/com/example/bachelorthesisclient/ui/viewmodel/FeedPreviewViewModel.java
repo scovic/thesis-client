@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel;
 import com.example.bachelorthesisclient.model.Feed;
 import com.example.bachelorthesisclient.model.Post;
 import com.example.bachelorthesisclient.model.User;
-import com.example.bachelorthesisclient.repository.FeedRepository;
-import com.example.bachelorthesisclient.repository.IamRepository;
+import com.example.bachelorthesisclient.repository.feed.FeedRepository;
+import com.example.bachelorthesisclient.repository.iam.IamRepository;
 import com.example.bachelorthesisclient.repository.RepositoryFactory;
 
 import io.reactivex.SingleObserver;

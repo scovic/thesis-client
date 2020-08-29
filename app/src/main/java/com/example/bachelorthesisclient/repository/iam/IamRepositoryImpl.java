@@ -1,8 +1,7 @@
-package com.example.bachelorthesisclient.repository;
+package com.example.bachelorthesisclient.repository.iam;
 
 import com.example.bachelorthesisclient.model.User;
 import com.example.bachelorthesisclient.network.api.IamApi;
-import com.example.bachelorthesisclient.network.dto.UserDto;
 import com.example.bachelorthesisclient.network.dto.UsersDto;
 import com.example.bachelorthesisclient.util.LoggedInUserPersistenceUtil;
 import com.example.bachelorthesisclient.wrapper.RetrofitWrapper;
@@ -44,6 +43,17 @@ public class IamRepositoryImpl implements IamRepository {
                             }
                         }
                 );
+    }
+
+    @Override
+    public Single<Boolean> updateUser(int id, User user) {
+        return this.iamApi.updateUser(
+                getAuthorizationHeaderValue(),
+                id,
+                user.getFirstName(),
+                user.getLastName()
+        )
+                .subscribeOn(Schedulers.io());
     }
 
     private String getAuthorizationHeaderValue() {

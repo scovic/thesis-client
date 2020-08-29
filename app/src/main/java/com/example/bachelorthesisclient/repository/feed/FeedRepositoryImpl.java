@@ -1,4 +1,4 @@
-package com.example.bachelorthesisclient.repository;
+package com.example.bachelorthesisclient.repository.feed;
 
 import android.graphics.Bitmap;
 
@@ -116,6 +116,53 @@ public class FeedRepositoryImpl implements FeedRepository {
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Single<Boolean> deleteFeed(Feed feed) {
+        return feedApi.deleteFeed(
+                getAuthorizationHeaderValue(),
+                feed.getPost().getId()
+        ).subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Single<Boolean> updateFeed(Feed feed, List<Bitmap> bitmaps) {
+        final List<String> tempFilesPaths = new ArrayList<>();
+
+        MultipartBody.Builder builder = new MultipartBody.Builder();
+        builder.setType(MultipartBody.FORM);
+
+        builder.addFormDataPart("text", feed.getPost().getText());
+        builder.addFormDataPart("authorId", String.valueOf(feed.getPost().getAuthorId()));
+        builder.addFormDataPart("id", String.valueOf(feed.getPost().getId()));
+
+        for (Bitmap bitmap : bitmaps) {
+            String absolutePath = ExternalStorageUtil.saveBitmap(bitmap);
+            tempFilesPaths.add(absolutePath);
+            File file = new File(absolutePath);
+
+            RequestBody requestImage = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            builder.addFormDataPart("files", file.getName(), requestImage);
+
+        }
+
+        MultipartBody requestBody = builder.build();
+
+        return feedApi.updateFeed(
+                getAuthorizationHeaderValue(),
+                requestBody
+        ).subscribeOn(Schedulers.io())
+                .map(new Function<Boolean, Boolean>() {
+                    @Override
+                    public Boolean apply(Boolean aBoolean) throws Exception {
+                        for (String path : tempFilesPaths) {
+                            ExternalStorageUtil.deleteFile(path);
+                        }
+
+                        return aBoolean;
+                    }
+                });
     }
 
     private String getAuthorizationHeaderValue() {

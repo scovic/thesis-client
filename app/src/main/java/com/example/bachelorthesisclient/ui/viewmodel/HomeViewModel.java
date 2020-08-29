@@ -1,21 +1,21 @@
 package com.example.bachelorthesisclient.ui.viewmodel;
 
 import android.location.Location;
+import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.bachelorthesisclient.model.Feed;
-import com.example.bachelorthesisclient.repository.FeedRepository;
-import com.example.bachelorthesisclient.repository.NotificationRepository;
+import com.example.bachelorthesisclient.repository.feed.FeedRepository;
+import com.example.bachelorthesisclient.repository.notification.NotificationRepository;
 import com.example.bachelorthesisclient.repository.RepositoryFactory;
 import com.example.bachelorthesisclient.wrapper.FusedLocationProviderWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleSource;
 import io.reactivex.disposables.Disposable;
@@ -26,6 +26,7 @@ public class HomeViewModel extends ViewModel {
     private NotificationRepository notificationRepository;
     private MutableLiveData<List<Feed>> feeds;
     private MutableLiveData<Boolean> loading;
+    private Parcelable feedListViewState;
 
     public HomeViewModel() {
         super();
@@ -99,5 +100,13 @@ public class HomeViewModel extends ViewModel {
                         }
                 )
                 .subscribe();
+    }
+
+    public Parcelable getFeedListViewState() {
+        return feedListViewState;
+    }
+
+    public void setFeedListViewState(Parcelable feedListViewState) {
+        this.feedListViewState = feedListViewState;
     }
 }

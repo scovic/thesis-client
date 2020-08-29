@@ -6,9 +6,12 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.bachelorthesisclient.model.mapobject.BiggerStateMapObject;
 import com.example.bachelorthesisclient.model.mapobject.ExitMapObject;
 import com.example.bachelorthesisclient.model.mapobject.MapObject;
 import com.example.bachelorthesisclient.model.mapobject.StageMapObject;
+import com.example.bachelorthesisclient.model.mapobject.WcMapObject;
+import com.example.bachelorthesisclient.util.EventDetailsPersistenceUtil;
 import com.example.bachelorthesisclient.util.MapUtil;
 import com.example.bachelorthesisclient.wrapper.FusedLocationProviderWrapper;
 import com.google.android.gms.location.LocationCallback;
@@ -29,7 +32,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class MapViewModel extends ViewModel {
-    private final GeoPoint eventLocation = new GeoPoint(43.3260, 21.8954);
+    private final GeoPoint eventLocation = EventDetailsPersistenceUtil.getEventDetails().getLocation();
 
     private MutableLiveData<List<MapObject>> mapObjects;
     private MutableLiveData<GeoPoint> userLocation;
@@ -53,10 +56,14 @@ public class MapViewModel extends ViewModel {
     private List<MapObject> getObjects() {
         List<MapObject> objects = new ArrayList<>();
 
-        objects.add(new ExitMapObject("First Exit", new GeoPoint(43.323208, 21.895265)));
-        objects.add(new ExitMapObject("Second Exit", new GeoPoint(43.328052, 21.893086)));
-        objects.add(new ExitMapObject("Third Exit", new GeoPoint(43.327731, 21.897362)));
-        objects.add(new StageMapObject("Main Stage", new GeoPoint(43.325676, 21.892801)));
+        objects.add(new ExitMapObject("Exit 1", new GeoPoint(43.323208, 21.895265)));
+        objects.add(new ExitMapObject("Exit 2", new GeoPoint(43.328052, 21.893086)));
+        objects.add(new ExitMapObject("Exit 3", new GeoPoint(43.327731, 21.897362)));
+        objects.add(new BiggerStateMapObject("Main Stage", new GeoPoint(43.325676, 21.892801)));
+        objects.add(new StageMapObject("Little Jazz Stage", new GeoPoint(43.323581, 21.895090)));
+        objects.add(new StageMapObject("Rock Stage", new GeoPoint(43.325800, 21.895313)));
+        objects.add(new StageMapObject("Letnja pozornica", new GeoPoint(43.323981, 21.896102)));
+        objects.add(new WcMapObject("WC", new GeoPoint(43.324052, 21.895425)));
 
         return objects;
     }
@@ -186,11 +193,6 @@ public class MapViewModel extends ViewModel {
                         return MapUtil.getPolyline(userLocation, object.getLocation()).toObservable();
                     }
                 });
-    }
-
-    public boolean userPositionChanged(GeoPoint newPosition) {
-        return userLocation.getValue().getLatitude() != newPosition.getLatitude()
-                || userLocation.getValue().getLongitude() != newPosition.getLongitude();
     }
 
     @Override

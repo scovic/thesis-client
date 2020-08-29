@@ -10,6 +10,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.example.bachelorthesisclient.model.Feed;
 import com.example.bachelorthesisclient.service.NotificationsMessagingService;
 import com.example.bachelorthesisclient.ui.adapter.FeedAdapter;
 import com.example.bachelorthesisclient.ui.viewmodel.HomeViewModel;
+import com.example.bachelorthesisclient.util.LoggedInUserPersistenceUtil;
 import com.example.bachelorthesisclient.wrapper.FusedLocationProviderWrapper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;;
 
@@ -81,6 +83,20 @@ public class HomeActivity extends AppCompatActivity {
 
                 return true;
             }
+            case R.id.menu_item_show_tickets: {
+                Intent i = new Intent(this, UserTicketsActivity.class);
+                startActivity(i);
+
+                return true;
+            }
+            case R.id.menu_item_sign_out: {
+                Intent i = new Intent(this, LoginActivity.class);
+                startActivity(i);
+                LoggedInUserPersistenceUtil.signOut();
+
+                finish();
+                return true;
+            }
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -91,6 +107,14 @@ public class HomeActivity extends AppCompatActivity {
         super.onStart();
         if (mViewModel != null) {
             mViewModel.getData();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (feedList != null) {
+            mViewModel.setFeedListViewState(feedList.onSaveInstanceState());
         }
     }
 
@@ -136,6 +160,10 @@ public class HomeActivity extends AppCompatActivity {
             public void onChanged(List<Feed> feeds) {
                 feedAdapter = new FeedAdapter(HomeActivity.this, feeds);
                 feedList.setAdapter(feedAdapter);
+
+                if (mViewModel.getFeedListViewState() != null) {
+                    feedList.onRestoreInstanceState(mViewModel.getFeedListViewState());
+                }
             }
         });
 

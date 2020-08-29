@@ -1,4 +1,4 @@
-package com.example.bachelorthesisclient.repository;
+package com.example.bachelorthesisclient.repository.settings;
 
 import com.example.bachelorthesisclient.model.Settings;
 import com.example.bachelorthesisclient.util.SettingsPersistenceUtil;

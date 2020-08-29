@@ -10,12 +10,14 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,20 +32,29 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.bachelorthesisclient.R;
+import com.example.bachelorthesisclient.model.Feed;
+import com.example.bachelorthesisclient.model.Post;
 import com.example.bachelorthesisclient.ui.viewmodel.CreateFeedViewModel;
+import com.example.bachelorthesisclient.util.ImageUtil;
+import com.example.bachelorthesisclient.util.PermissionsUtil;
 import com.example.bachelorthesisclient.wrapper.FusedLocationProviderWrapper;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CreateFeedActivity extends AppCompatActivity {
     private CreateFeedViewModel mViewModel;
 
+    private final int TAKE_PHOTO_REQUEST_CODE = 0;
+    private final int CHOOSE_FROM_GALLERY_REQUEST_CODE = 1;
+
     private Button uploadImage;
     private Button publishPost;
-    private TextInputEditText textEditor;
+    private TextInputLayout textEditor;
     private LinearLayout imageContainer;
     private CheckBox cbxSendNotification;
 
@@ -54,8 +65,7 @@ public class CreateFeedActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.actionbar_layout);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        AppCompatTextView tv = findViewById(R.id.tv_action_bar_title);
-        tv.setText("Create New Feed");
+        setTitle("Create New Feed");
 
         setViews();
         setAndObserveViewModel();
@@ -63,6 +73,7 @@ public class CreateFeedActivity extends AppCompatActivity {
         setOnClickListeners();
         setOnTextChangeListener();
         setOnCheckedListener();
+        handleDataFromIntent();
     }
 
     @Override
@@ -70,16 +81,22 @@ public class CreateFeedActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == 0) {
+            if (requestCode == TAKE_PHOTO_REQUEST_CODE) {
                 this.mViewModel.addImage((Bitmap) data.getExtras().get("data"));
-            } else if (requestCode == 1) {
+            } else if (requestCode == CHOOSE_FROM_GALLERY_REQUEST_CODE) {
                 try {
-                    final Uri imageUri = data.getData();
-                    final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                    ClipData clipData = data.getClipData();
 
-                    this.mViewModel.addImage(BitmapFactory.decodeStream(imageStream));
+                    for (int i = 0; i < clipData.getItemCount(); i++) {
+                        ClipData.Item item = clipData.getItemAt(i);
+                        final Uri imageUri = item.getUri();
+                        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+
+                        this.mViewModel.addImage(BitmapFactory.decodeStream(imageStream));
+                        imageStream.close();
+                    }
                 } catch (IOException e) {
-                    Log.i("TAG", "Couldn't get image " + e);
+                    Log.i("CreateFeed", "Couldn't get image " + e);
                 }
             }
         }
@@ -127,7 +144,7 @@ public class CreateFeedActivity extends AppCompatActivity {
     }
 
     private void setOnTextChangeListener() {
-        textEditor.addTextChangedListener(new TextWatcher() {
+        textEditor.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -187,7 +204,13 @@ public class CreateFeedActivity extends AppCompatActivity {
             @Override
             public void onChanged(Boolean successfulCreated) {
                 if (successfulCreated) {
-                    Toast.makeText(CreateFeedActivity.this, "Feed Created", Toast.LENGTH_SHORT).show();
+                    String message = "Feed Created";
+
+                    if (mViewModel.getFeedToEdit().getValue() != null) {
+                        message = "Feed Updated";
+                    }
+
+                    Toast.makeText(CreateFeedActivity.this, message, Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
@@ -208,6 +231,26 @@ public class CreateFeedActivity extends AppCompatActivity {
                 }
             }
         });
+
+        mViewModel.getFeedToEdit().observe(this, new Observer<Feed>() {
+            @Override
+            public void onChanged(Feed feed) {
+                if (feed == null) {
+                    cbxSendNotification.setEnabled(true);
+                } else {
+                    setTitle("Edit Feed");
+                    cbxSendNotification.setEnabled(false);
+                    textEditor.getEditText().setText(feed.getPost().getText());
+                    publishPost.setText("Update Post");
+                    publishPost.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mViewModel.updateFeed();
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void recreateImageViews() {
@@ -218,19 +261,30 @@ public class CreateFeedActivity extends AppCompatActivity {
         }
     }
 
-    private void addPhoto(Bitmap photo) {
+    private void addPhoto(final Bitmap photo) {
         ImageView iv = new ImageView(this);
 
         imageContainer.addView(iv);
         iv.getLayoutParams().height = 400;
         iv.getLayoutParams().width = 300;
 
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageUtil.previewImage(photo, CreateFeedActivity.this);
+            }
+        });
+
         iv.setImageBitmap(photo);
     }
 
     private void takeAPhoto() {
-        Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePhoto, 0);
+        if (PermissionsUtil.checkForCameraPermission()) {
+            Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(takePhoto, TAKE_PHOTO_REQUEST_CODE);
+        } else {
+            PermissionsUtil.askForCameraPermission(this);
+        }
     }
 
     private void choosePhotoFromGallery() {
@@ -239,7 +293,24 @@ public class CreateFeedActivity extends AppCompatActivity {
         photoPickerIntent.setType("image/*");
         photoPickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
 
-        startActivityForResult(photoPickerIntent, 1);
+        startActivityForResult(photoPickerIntent, CHOOSE_FROM_GALLERY_REQUEST_CODE);
+    }
+
+    private void handleDataFromIntent() {
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null) {
+            int postId = extras.getInt("postId", 0);
+
+            if (postId > 0) {
+                mViewModel.loadFeedDetails(postId);
+            }
+        }
+    }
+
+    private void setTitle(String title) {
+        AppCompatTextView tv = findViewById(R.id.tv_action_bar_title);
+        tv.setText(title);
     }
 
 }

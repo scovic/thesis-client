@@ -8,32 +8,19 @@ public class PostDto {
     int id;
     private String text;
     private int authorId;
-    private Date createdAt;
-    private Date updatedAt;
+    private double latitude;
+    private double longitude;
+    private long createdAt;
+    private long updatedAt;
     private List<String> attachmentNames;
 
-    public PostDto() {
-        attachmentNames = new ArrayList<>();
-    }
-
-    public PostDto(int id, String text, int authorId) {
+    public PostDto(int id, String text, int authorId, double lat, double lon, List<String> attachmentNames) {
         this.id = id;
         this.text = text;
         this.authorId = authorId;
-    }
-
-    public PostDto(String text, int authorId) {
-        this.id = -1;
-        this.text = text;
-        this.authorId = authorId;
-    }
-
-    public PostDto(int id, String text, int authorId, Date createdAt, Date updatedAt) {
-        this.id = id;
-        this.text = text;
-        this.authorId = authorId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.latitude = lat;
+        this.longitude = lon;
+        this.attachmentNames = attachmentNames;
     }
 
     public int getId() {
@@ -60,19 +47,19 @@ public class PostDto {
         this.authorId = authorId;
     }
 
-    public Date getCreatedAt() {
+    public long getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(long createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public long getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(long updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -82,5 +69,21 @@ public class PostDto {
 
     public void setAttachmentNames(List<String> attachmentNames) {
         this.attachmentNames = attachmentNames;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,7 +11,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -21,63 +22,76 @@
             android:layout_height="match_parent"
             android:padding="8dp">
 
-            <TextView
-                android:id="@+id/text_view_content_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/label_content"
-                android:textSize="26sp" />
-
-            <com.google.android.material.textfield.TextInputEditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/text_view_content_label"
-                android:layout_marginTop="10dp" />
+
+                android:layout_marginTop="10dp"
+                app:placeholderText="Write something..">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/scroll_view_create_feed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:inputType="textMultiLine"
+                    android:lines="2"
+                    android:maxLines="14"
+                    android:textAlignment="viewStart" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <HorizontalScrollView
                 android:id="@+id/horizontalScrollView"
-                android:layout_below="@id/text_input_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            <LinearLayout
-                android:id="@+id/ly_image_container"
-                android:layout_below="@id/text_input_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
-                android:orientation="horizontal"/>
+                android:layout_below="@id/text_input_content">
+
+                <LinearLayout
+                    android:id="@+id/ly_image_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:orientation="horizontal" />
             </HorizontalScrollView>
+
+            <View
+                android:id="@+id/divider_2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/horizontalScrollView"
+                android:layout_marginVertical="8dp"
+                android:background="#c0c0c0" />
 
             <CheckBox
                 android:id="@+id/checkbox_send_info_notif"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/horizontalScrollView"
+                android:layout_below="@id/divider_2"
                 android:text="@string/checkbox_label_notify" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_below="@id/checkbox_send_info_notif"
+                android:layout_marginTop="8dp"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btn_publish_post"
+                    style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="?android:attr/buttonBarNeutralButtonStyle"
-                    android:text="Publish post" />
+                    android:text="@string/publish_post" />
 
                 <Button
                     android:id="@+id/btn_upload_images"
+                    style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:text="Upload Images" />
+                    android:text="@string/upload_images" />
             </LinearLayout>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

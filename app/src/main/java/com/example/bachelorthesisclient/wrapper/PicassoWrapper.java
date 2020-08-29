@@ -1,6 +1,8 @@
 package com.example.bachelorthesisclient.wrapper;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 import com.example.bachelorthesisclient.BuildConfig;
@@ -8,6 +10,7 @@ import com.example.bachelorthesisclient.util.AppContext;
 import com.example.bachelorthesisclient.util.LoggedInUserPersistenceUtil;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.IOException;
 
@@ -49,6 +52,18 @@ public class PicassoWrapper {
     }
 
     public void loadImage(String imageUrl, ImageView imageView) {
+        picasso.load(getImageUrl(imageUrl))
+                .resize(500, 500)
+                .into(imageView);
+    }
+
+    public void loadImage(String imageUrl, Target target) {
+        picasso.load(getImageUrl(imageUrl))
+                .resize(500, 500)
+                .into(target);
+    }
+
+    public void loadImageWithoutResize(String imageUrl, ImageView imageView) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(BuildConfig.BACKEND_BASE_URL);
         stringBuilder.append("/post-service");
@@ -59,9 +74,20 @@ public class PicassoWrapper {
             stringBuilder.append("/").append(imageUrl);
         }
 
-        picasso.load(stringBuilder.toString())
-                .resize(500, 500)
-                .into(imageView);
+        picasso.load(stringBuilder.toString()).into(imageView);
     }
 
+    private String getImageUrl(String imageUrl) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(BuildConfig.BACKEND_BASE_URL);
+        stringBuilder.append("/post-service");
+
+        if (imageUrl.charAt(0) == '/') {
+            stringBuilder.append(imageUrl);
+        } else {
+            stringBuilder.append("/").append(imageUrl);
+        }
+
+        return stringBuilder.toString();
+    }
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,12 +26,13 @@ public class FeedPreviewActivity extends AppCompatActivity {
     TextView tvUserName;
     TextView tvDate;
     TextView tvContent;
+    TextView tvFeedNotFound;
     LinearLayout llImageContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_preview);
+        setContentView(R.layout.activity_feed_preview);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -43,8 +45,6 @@ public class FeedPreviewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: {
-                Intent i = new Intent(FeedPreviewActivity.this, HomeActivity.class);
-                startActivity(i);
                 finish();
                 return true;
             }
@@ -57,6 +57,7 @@ public class FeedPreviewActivity extends AppCompatActivity {
         tvUserName = findViewById(R.id.text_name);
         tvDate = findViewById(R.id.text_date);
         tvContent = findViewById(R.id.text_post);
+        tvFeedNotFound = findViewById(R.id.tv_feed_not_found);
         llImageContainer = findViewById(R.id.image_container);
     }
 
@@ -65,7 +66,9 @@ public class FeedPreviewActivity extends AppCompatActivity {
 
         if (extras != null) {
             int postId = extras.getInt("postId", 0);
-            mViewModel.loadFeedDetails(postId);
+            if (postId > 0) {
+                mViewModel.loadFeedDetails(postId);
+            }
         }
     }
 
@@ -84,6 +87,7 @@ public class FeedPreviewActivity extends AppCompatActivity {
             public void onChanged(Feed feed) {
                 if (feed != null) {
                     displayData(feed);
+                    tvFeedNotFound.setVisibility(View.GONE);
                 }
             }
         };
@@ -98,6 +102,8 @@ public class FeedPreviewActivity extends AppCompatActivity {
 
         for (String attachment : feed.getPost().getAttachmentNames()) {
             ImageView iv = new ImageView(FeedPreviewActivity.this);
+            iv.setOnClickListener(handleOnClickImageView(feed.getPost().getId(), attachment));
+            iv.setPadding(4, 0, 4, 0);
             llImageContainer.addView(iv);
 
             PicassoWrapper.getInstance().loadImage(this.makeImageUrl(feed.getPost().getId(), attachment), iv);
@@ -110,6 +116,18 @@ public class FeedPreviewActivity extends AppCompatActivity {
         stringBuilder.append("/").append(imageName);
 
         return stringBuilder.toString();
+    }
+
+    private View.OnClickListener handleOnClickImageView(final int postId, final String imageName) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(FeedPreviewActivity.this, ImagePreviewActivity.class);
+                i.putExtra("postId", postId);
+                i.putExtra("imageName", imageName);
+                startActivity(i);
+            }
+        };
     }
 
 }

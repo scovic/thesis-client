@@ -1,4 +1,4 @@
-package com.example.bachelorthesisclient.repository;
+package com.example.bachelorthesisclient.repository.notification;
 
 import com.example.bachelorthesisclient.model.Location;
 import com.example.bachelorthesisclient.model.NotificationData;

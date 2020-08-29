@@ -43,5 +43,21 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="upload_images">Upload Images</string>
+    <string name="publish_post">Publish post</string>
+    <string name="preview">Preview</string>
+    <string name="reserve_tickets">Reserve Tickets</string>
+    <string name="make_reservation">Reserve</string>
+    <string name="exceeded_number_of_reservation">You exceeded your limit for number of reservations</string>
+    <string name="no_tickets_reserved">No tickets reserved</string>
+    <string name="reserved_tickets">Reserved Tickets</string>
+    <string name="sign_out">Sign out</string>
+    <string name="ticket_cancel">Ticket cancel</string>
+    <string name="label_notifications">Notifications</string>
+    <string name="label_profile">Profile</string>
+    <string name="btn_settings_update">Update</string>
+    <string name="content_descr_edit_feed">Edit feed</string>
+    <string name="content_descr_delete_feed">Delete feed</string>
+    <string name="show_feed_on_map">Show feed on map</string>
 
 </resources>

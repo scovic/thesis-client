@@ -7,6 +7,13 @@ public class UserDto {
     private String firstName;
     private String lastName;
 
+    public UserDto(int id, String email, String firstName, String lastName) {
+        this.id = id;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public int getId() {
         return id;
     }

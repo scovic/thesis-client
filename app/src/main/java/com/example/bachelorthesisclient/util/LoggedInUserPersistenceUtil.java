@@ -32,7 +32,7 @@ public class LoggedInUserPersistenceUtil {
         return jwt.getClaim("id").asInt();
     }
 
-   public static User getUser() {
+    public static User getUser() {
         JWT jwt = getJwtToken();
         return new User(
                 jwt.getClaim("id").asInt(),
@@ -42,13 +42,17 @@ public class LoggedInUserPersistenceUtil {
         );
     }
 
+    public static void signOut() {
+        SharedPreferenceWrapper.getInstance().remove(LOGGED_USER_KEY);
+    }
+
     private static JWT getJwtToken() {
         String json = getLoggedUserJson();
         LoggedUserPersistence loggedInUser = (LoggedUserPersistence) GsonWrapper.fromJson(json, LoggedUserPersistence.class);
         return new JWT(loggedInUser.getToken());
     }
 
-    private static String getLoggedUserJson()  {
+    private static String getLoggedUserJson() {
         return (String) SharedPreferenceWrapper.getInstance().get(LOGGED_USER_KEY, "");
     }
 }
