@@ -16,6 +16,7 @@ import com.example.bachelorthesisclient.BuildConfig;
 import com.example.bachelorthesisclient.R;
 import com.example.bachelorthesisclient.model.mapobject.FeedMapObject;
 import com.example.bachelorthesisclient.model.mapobject.MapObject;
+import com.example.bachelorthesisclient.model.mapobject.StageMapObject;
 import com.example.bachelorthesisclient.service.NotificationsMessagingService;
 import com.example.bachelorthesisclient.ui.viewmodel.MapViewModel;
 
@@ -148,7 +149,11 @@ public class MapActivity extends AppCompatActivity {
 
     private void displayObjects(List<MapObject> list) {
         for (MapObject object : list) {
-            this.addAnObjectToMap(object);
+            if (object instanceof StageMapObject) {
+                this.addAnObjectToMap(object, getOnStageClickListener(object));
+            } else {
+                this.addAnObjectToMap(object);
+            }
         }
 
         mapView.invalidate();
@@ -186,6 +191,19 @@ public class MapActivity extends AppCompatActivity {
                 }
 
                 return false;
+            }
+        };
+    }
+
+    private Marker.OnMarkerClickListener getOnStageClickListener(final MapObject stage) {
+        return new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                Intent i = new Intent(MapActivity.this, StagePerformersActivity.class);
+                i.putExtra("stageId", stage.getId());
+                i.putExtra("stageName", stage.getName());
+                startActivity(i);
+                return true;
             }
         };
     }

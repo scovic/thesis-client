@@ -24,6 +24,7 @@ import com.example.bachelorthesisclient.ui.adapter.TicketAdapter;
 import com.example.bachelorthesisclient.ui.viewmodel.UserTicketsViewModel;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserTicketsActivity extends AppCompatActivity {
@@ -70,8 +71,7 @@ public class UserTicketsActivity extends AppCompatActivity {
         mViewModel.getTickets().observe(this, new Observer<List<Ticket>>() {
             @Override
             public void onChanged(List<Ticket> tickets) {
-                ticketAdapter = new TicketAdapter(UserTicketsActivity.this, tickets);
-                ticketList.setAdapter(ticketAdapter);
+                ticketAdapter.setTicketList(tickets);
             }
         });
 
@@ -120,6 +120,9 @@ public class UserTicketsActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_tickets);
         tvErrorMessage = findViewById(R.id.tv_user_tickets_error_msg);
         tvNoTicketsMessage = findViewById(R.id.tv_no_tickets);
+
+        ticketAdapter = new TicketAdapter(this, new ArrayList<Ticket>());
+        ticketList.setAdapter(ticketAdapter);
 
     }
 

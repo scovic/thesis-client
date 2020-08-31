@@ -2,6 +2,7 @@ package com.example.bachelorthesisclient.repository.notification;
 
 import com.example.bachelorthesisclient.model.Location;
 import com.example.bachelorthesisclient.model.NotificationData;
+import com.example.bachelorthesisclient.model.Post;
 import com.example.bachelorthesisclient.model.User;
 import com.example.bachelorthesisclient.network.api.NotificationApi;
 import com.example.bachelorthesisclient.network.dto.NotificationDto;
@@ -30,18 +31,18 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     }
 
     @Override
-    public Single<Boolean> sendInfoNotification(PostDto postDto, Location location) {
+    public Single<Boolean> sendInfoNotification(Post post) {
         NotificationData data = new NotificationData();
 
         User loggedInUser = LoggedInUserPersistenceUtil.getUser();
         String title = String.format("%s %s made a feed", loggedInUser.getFirstName(), loggedInUser.getLastName());
-        String body = postDto.getText();
+        String body = post.getText();
 
         data.setTitle(title);
         data.setBody(body);
         data.setSender(loggedInUser.getId());
-        data.setLocation(location);
-        data.setPostId(postDto.getId());
+        data.setLocation(post.getLocation().getLatitude(), post.getLocation().getLongitude());
+        data.setPostId(post.getId());
         data.setInfoTag();
 
         return notificationApi.sendInfoNotification(getAuthorizationHeaderValue(), new NotificationDto(data.build()))

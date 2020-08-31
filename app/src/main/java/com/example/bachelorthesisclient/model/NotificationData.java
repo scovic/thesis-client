@@ -80,6 +80,12 @@ public class NotificationData {
         return this;
     }
 
+    public NotificationData setLocation(double latitude, double longitude) {
+        data.put(this.LATITUDE_KEY, String.valueOf(latitude));
+        data.put(this.LONGITUDE_KEY, String.valueOf(longitude));
+        return this;
+    }
+
     public Location getLocation() {
         double latitude = Double.valueOf(data.get(this.LATITUDE_KEY));
         double longitude = Double.valueOf(data.get(this.LONGITUDE_KEY));

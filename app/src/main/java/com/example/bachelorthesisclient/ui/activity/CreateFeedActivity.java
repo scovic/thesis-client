@@ -265,15 +265,17 @@ public class CreateFeedActivity extends AppCompatActivity {
         ImageView iv = new ImageView(this);
 
         imageContainer.addView(iv);
-        iv.getLayoutParams().height = 400;
-        iv.getLayoutParams().width = 300;
+        iv.getLayoutParams().width = 400;
+        iv.getLayoutParams().height = 300;
 
-        iv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ImageUtil.previewImage(photo, CreateFeedActivity.this);
-            }
-        });
+        if (mViewModel.getFeedToEdit().getValue() != null) {
+            iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImageUtil.previewImage(photo, CreateFeedActivity.this);
+                }
+            });
+        }
 
         iv.setImageBitmap(photo);
     }

@@ -82,14 +82,17 @@ public class FeedRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public Single<PostDto> createNewFeed(String content, int authorId, List<Bitmap> bitmaps) {
+    public Single<Post> createNewFeed(Feed feed, List<Bitmap> bitmaps) {
         final List<String> tempFilesPaths = new ArrayList<>();
 
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
 
-        builder.addFormDataPart("text", content);
-        builder.addFormDataPart("authorId", String.valueOf(authorId));
+        Post newPost = feed.getPost();
+        builder.addFormDataPart("text", newPost.getText());
+        builder.addFormDataPart("authorId", String.valueOf(newPost.getAuthorId()));
+        builder.addFormDataPart("latitude", String.valueOf(newPost.getLocation().getLatitude()));
+        builder.addFormDataPart("longitude", String.valueOf(newPost.getLocation().getLongitude()));
 
         for (Bitmap bitmap : bitmaps) {
             String absolutePath = ExternalStorageUtil.saveBitmap(bitmap);
@@ -105,14 +108,14 @@ public class FeedRepositoryImpl implements FeedRepository {
 
         return feedApi.createFeed(this.getAuthorizationHeaderValue(), requestBody)
                 .subscribeOn(Schedulers.io())
-                .map(new Function<PostDto, PostDto>() {
+                .map(new Function<PostDto, Post>() {
                     @Override
-                    public PostDto apply(PostDto postDto) throws Exception {
+                    public Post apply(PostDto postDto) throws Exception {
                         for (String path : tempFilesPaths) {
                             ExternalStorageUtil.deleteFile(path);
                         }
 
-                        return postDto;
+                        return new Post(postDto);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread());

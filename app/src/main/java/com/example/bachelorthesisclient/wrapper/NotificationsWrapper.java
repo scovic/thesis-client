@@ -60,7 +60,7 @@ public class NotificationsWrapper {
     public NotificationsWrapper setOnTapAction(Intent intent) {
         this.checkForBuilder();
 
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(AppContext.getAppContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
 

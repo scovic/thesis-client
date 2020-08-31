@@ -15,7 +15,6 @@ import com.example.bachelorthesisclient.wrapper.PicassoWrapper;
 public class ImagePreviewActivity extends AppCompatActivity {
     ImageView ivEnlargedImage;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

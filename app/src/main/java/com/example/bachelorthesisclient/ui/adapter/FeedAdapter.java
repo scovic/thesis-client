@@ -240,4 +240,9 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
                 });
     }
 
+    public void setFeedList(List<Feed> feedList) {
+        this.feedList.clear();
+        this.feedList.addAll(feedList);
+        notifyDataSetChanged();
+    }
 }

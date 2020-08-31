@@ -147,4 +147,10 @@ public class TicketAdapter extends ArrayAdapter<Ticket> {
             }
         };
     }
+
+    public void setTicketList(List<Ticket> ticketList) {
+        this.ticketList.clear();
+        this.ticketList.addAll(ticketList);
+        notifyDataSetChanged();
+    }
 }

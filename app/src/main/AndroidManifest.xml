@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.activity.UserTicketsActivity"></activity>
+        <activity android:name=".ui.activity.StagePerformersActivity"></activity>
+        <activity android:name=".ui.activity.UserTicketsActivity" />
         <activity android:name=".ui.activity.ImagePreviewActivity" />
         <activity android:name=".ui.activity.SettingsActivity" />
         <activity android:name=".ui.activity.MapActivity" />

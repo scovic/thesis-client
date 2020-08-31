@@ -6,11 +6,15 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.bachelorthesisclient.model.mapobject.BiggerStateMapObject;
+import com.example.bachelorthesisclient.model.EventDetails;
+import com.example.bachelorthesisclient.model.EventObject;
 import com.example.bachelorthesisclient.model.mapobject.ExitMapObject;
 import com.example.bachelorthesisclient.model.mapobject.MapObject;
 import com.example.bachelorthesisclient.model.mapobject.StageMapObject;
 import com.example.bachelorthesisclient.model.mapobject.WcMapObject;
+import com.example.bachelorthesisclient.repository.RepositoryFactory;
+import com.example.bachelorthesisclient.repository.eventdetails.EventDetailsRepository;
+import com.example.bachelorthesisclient.ui.EventObjectToMapObjectMapper;
 import com.example.bachelorthesisclient.util.EventDetailsPersistenceUtil;
 import com.example.bachelorthesisclient.util.MapUtil;
 import com.example.bachelorthesisclient.wrapper.FusedLocationProviderWrapper;
@@ -18,7 +22,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
 
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
@@ -33,6 +37,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MapViewModel extends ViewModel {
     private final GeoPoint eventLocation = EventDetailsPersistenceUtil.getEventDetails().getLocation();
+    private EventDetailsRepository eventDetailsRepository;
 
     private MutableLiveData<List<MapObject>> mapObjects;
     private MutableLiveData<GeoPoint> userLocation;
@@ -44,28 +49,59 @@ public class MapViewModel extends ViewModel {
     public MapViewModel() {
         super();
 
-        mapObjects = new MutableLiveData<>(getObjects());
+        eventDetailsRepository = (EventDetailsRepository) RepositoryFactory.get(RepositoryFactory.EVENT_DETAILS_REPOSITORY);
+
+        List<MapObject> startList = new ArrayList<>();
+        mapObjects = new MutableLiveData<>(startList);
+
         userLocation = new MutableLiveData<>();
         feed = new MutableLiveData<>(null);
         escapeRoute = new MutableLiveData<>(null);
 
         FusedLocationProviderWrapper.getInstance()
                 .getLocationUpdates(setLocationCallback());
+
+        getObjects();
     }
 
-    private List<MapObject> getObjects() {
-        List<MapObject> objects = new ArrayList<>();
+    private void getObjects() {
+        eventDetailsRepository.getEventObjects()
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Function<List<EventObject>, List<MapObject>>() {
+                    @Override
+                    public List<MapObject> apply(List<EventObject> eventObjects) throws Exception {
+                        List<MapObject> mapObjects = new ArrayList<>();
 
-        objects.add(new ExitMapObject("Exit 1", new GeoPoint(43.323208, 21.895265)));
-        objects.add(new ExitMapObject("Exit 2", new GeoPoint(43.328052, 21.893086)));
-        objects.add(new ExitMapObject("Exit 3", new GeoPoint(43.327731, 21.897362)));
-        objects.add(new BiggerStateMapObject("Main Stage", new GeoPoint(43.325676, 21.892801)));
-        objects.add(new StageMapObject("Little Jazz Stage", new GeoPoint(43.323581, 21.895090)));
-        objects.add(new StageMapObject("Rock Stage", new GeoPoint(43.325800, 21.895313)));
-        objects.add(new StageMapObject("Letnja pozornica", new GeoPoint(43.323981, 21.896102)));
-        objects.add(new WcMapObject("WC", new GeoPoint(43.324052, 21.895425)));
+                        for (EventObject eventObject : eventObjects) {
+                            MapObject mappedObject = EventObjectToMapObjectMapper.map(eventObject);
 
-        return objects;
+                            if (mappedObject != null) {
+                                mapObjects.add(mappedObject);
+                            } else {
+                                Log.i("MapViewModel", String.format("There is no type %s for event object", eventObject.getType()));
+                            }
+                        }
+
+                        return mapObjects;
+                    }
+                })
+                .subscribe(new SingleObserver<List<MapObject>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(List<MapObject> mapObjects) {
+                        setMapObjects(mapObjects);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        int a = 5;
+                    }
+                });
+
     }
 
     private LocationCallback setLocationCallback() {
@@ -110,6 +146,10 @@ public class MapViewModel extends ViewModel {
 
     public void setFeed(MapObject feed) {
         this.feed.setValue(feed);
+    }
+
+    public void setMapObjects(List<MapObject> mapObjects) {
+        this.mapObjects.setValue(mapObjects);
     }
 
     public void setEscapeRoute(Polyline escapeRoute) {

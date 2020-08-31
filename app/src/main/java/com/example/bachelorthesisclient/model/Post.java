@@ -26,6 +26,12 @@ public class Post {
         this.location = new GeoPoint(postDto.getLatitude(), postDto.getLongitude());
     }
 
+    public Post(String text, int authorId, GeoPoint location) {
+        this.text = text;
+        this.authorId = authorId;
+        this.location = location;
+    }
+
     public PostDto getData() {
         return new PostDto(
                 getId(),

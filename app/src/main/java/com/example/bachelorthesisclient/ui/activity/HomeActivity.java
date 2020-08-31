@@ -27,6 +27,7 @@ import com.example.bachelorthesisclient.util.LoggedInUserPersistenceUtil;
 import com.example.bachelorthesisclient.wrapper.FusedLocationProviderWrapper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
@@ -50,6 +51,9 @@ public class HomeActivity extends AppCompatActivity {
         this.floatingActionButton = findViewById(R.id.fab);
         this.feedList = findViewById(R.id.feed_list);
         this.swipeRefreshLayout = findViewById(R.id.swipe_refresh);
+
+        this.feedAdapter = new FeedAdapter(this, new ArrayList<Feed>());
+        this.feedList.setAdapter(feedAdapter);
 
         this.setViewModel();
         this.setListeners();
@@ -158,8 +162,7 @@ public class HomeActivity extends AppCompatActivity {
         mViewModel.getFeeds().observe(this, new Observer<List<Feed>>() {
             @Override
             public void onChanged(List<Feed> feeds) {
-                feedAdapter = new FeedAdapter(HomeActivity.this, feeds);
-                feedList.setAdapter(feedAdapter);
+                feedAdapter.setFeedList(feeds);
 
                 if (mViewModel.getFeedListViewState() != null) {
                     feedList.onRestoreInstanceState(mViewModel.getFeedListViewState());

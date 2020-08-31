@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "280182402638",
+    "firebase_url": "https://diplomski-ed29b.firebaseio.com",
+    "project_id": "diplomski-ed29b",
+    "storage_bucket": "diplomski-ed29b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:280182402638:android:e72f6b74f4cadc2c891d1f",
+        "android_client_info": {
+          "package_name": "com.example.bachelorthesisclient"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "280182402638-h6h9btivbi45qg88i94omj6jt9hfi77r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2ZYbwTkz2C5U_TyU3cQw4G_fv6Yb3FcI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "280182402638-h6h9btivbi45qg88i94omj6jt9hfi77r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

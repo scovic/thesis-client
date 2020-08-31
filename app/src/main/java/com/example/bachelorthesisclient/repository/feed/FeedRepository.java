@@ -15,7 +15,7 @@ public interface FeedRepository {
     Single<List<Feed>> getPosts();
     Single<Post> getPost(int id);
     Single<ResponseBody> getFile(int postId, String fileName);
-    Single<PostDto> createNewFeed(String content, int authorId, List<Bitmap> bitmaps);
+    Single<Post> createNewFeed(Feed feed, List<Bitmap> bitmaps);
     Single<Boolean> deleteFeed(Feed feed);
     Single<Boolean> updateFeed(Feed feed, List<Bitmap> bitmaps);
 }

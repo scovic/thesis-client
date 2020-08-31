@@ -23,6 +23,8 @@ import com.example.bachelorthesisclient.wrapper.PicassoWrapper;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +61,7 @@ public class CreateFeedViewModel extends ViewModel {
         List<Bitmap> imagesDefaultValue = new ArrayList<>();
         this.images = new MutableLiveData<>(imagesDefaultValue);
         this.content = new MutableLiveData<>("");
-        this.sendNotification = new MutableLiveData<>(false);
+        this.sendNotification = new MutableLiveData<>(true);
         this.successfulCreated = new MutableLiveData<>(false);
         this.emptyContentField = new MutableLiveData<>(false);
         this.feedToEdit = new MutableLiveData<>(null);
@@ -108,33 +110,35 @@ public class CreateFeedViewModel extends ViewModel {
     }
 
     private void handleCreateFeed() {
-        int authorId = LoggedInUserPersistenceUtil.getUserId();
+        final int authorId = LoggedInUserPersistenceUtil.getUserId();
+        FusedLocationProviderWrapper
+                .getInstance()
+                .getLastLocation()
+                .flatMap(new Function<Location, SingleSource<Post>>() {
+                    @Override
+                    public SingleSource<Post> apply(Location location) throws Exception {
+                        Feed feed = new Feed();
+                        feed.setPost(new Post(
+                                content.getValue(),
+                                authorId,
+                                new GeoPoint(location.getLatitude(), location.getLongitude())
+                        ));
 
-        Single<PostDto> createFeedSingle = feedRepository.createNewFeed(
-                this.content.getValue(),
-                authorId,
-                this.images.getValue()
-        );
+                        return feedRepository.createNewFeed(feed, images.getValue());
+                    }
+                })
+                .flatMap(new Function<Post, SingleSource<Boolean>>() {
+                    @Override
+                    public SingleSource<Boolean> apply(Post post) throws Exception {
+                        if (getSendNotification().getValue()) {
+                            return notificationRepository.sendInfoNotification(post);
+                        } else {
+                            return Single.just(false);
+                        }
+                    }
+                })
+                .subscribe(this.handleCreateFeedSubscribe());
 
-        if (getSendNotification().getValue()) {
-            Single<Location> getCurrentLocationSingle = FusedLocationProviderWrapper
-                    .getInstance()
-                    .getLastLocation();
-
-            Single.zip(createFeedSingle, getCurrentLocationSingle, this.handleZipResult())
-                    .flatMap(
-                            new Function<Single<Boolean>, Single<Boolean>>() {
-                                @Override
-                                public Single<Boolean> apply(Single<Boolean> booleanSingle) throws Exception {
-                                    return booleanSingle;
-                                }
-                            }
-                    )
-                    .subscribe(this.handleCreateFeedSubscribe());
-
-        } else {
-            createFeedSingle.subscribe(this.handleCreateFeedSubscribe());
-        }
     }
 
     private void handleUpdateFeed() {
@@ -146,26 +150,6 @@ public class CreateFeedViewModel extends ViewModel {
         )
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(handleCreateFeedSubscribe());
-    }
-
-    private BiFunction<PostDto, Location, Single<Boolean>> handleZipResult() {
-        return new BiFunction<PostDto, Location, Single<Boolean>>() {
-            @Override
-            public Single<Boolean> apply(PostDto postDto, Location location) throws Exception {
-                double lat = 0;
-                double lon = 0;
-
-                if (location != null) {
-                    lat = location.getLatitude();
-                    lon = location.getLongitude();
-                }
-
-                return notificationRepository.sendInfoNotification(
-                        postDto,
-                        new com.example.bachelorthesisclient.model.Location(lat, lon)
-                );
-            }
-        };
     }
 
     private SingleObserver<Object> handleCreateFeedSubscribe() {
